@@ -22,7 +22,10 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          dark: "hsl(var(--primary-dark))",
+          soft: "hsl(var(--primary-soft))",
         },
+        
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
@@ -80,6 +83,10 @@ export default {
             height: "0",
           },
         },
+      },
+      fontFamily: {
+        display: ["Playfair Display", "serif"],
+        body: ["Inter", "sans-serif"],
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
