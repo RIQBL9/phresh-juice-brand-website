@@ -63,7 +63,7 @@ const Index = () => {
                   Explore Juices
                 </a>
                 <a href="#connect" className="px-7 py-3.5 rounded-full border border-primary/30 text-primary font-medium hover:bg-primary-soft transition-colors">
-                  Get in Touch
+                  Order
                 </a>
               </div>
             </div>
