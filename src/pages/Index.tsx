@@ -5,6 +5,7 @@ import juice2 from "@/assets/juice-2.jpeg";
 import juice3 from "@/assets/juice-3.jpeg";
 import juice4 from "@/assets/juice-4.jpeg";
 import juice5 from "@/assets/juice-5.jpeg";
+import aboutImg from "@/assets/IMG_7724.jpeg";
 
 const juices = [
   { n: "Juice 1", img: juice1, ingredients: ["Apple", "Beetroot", "Carrot", "Lemon", "Cucumber"] },
@@ -108,7 +109,7 @@ const Index = () => {
       <section id="about" className="py-20 md:py-28">
         <div className="container mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <UploadBox label="Brand / Lifestyle Image" className="aspect-[4/5] w-full" />
+            <img src={aboutImg} alt="PHRESH brand lifestyle" className="aspect-[4/5] w-full object-cover rounded-2xl" />
             <div className="space-y-6">
               <span className="text-sm font-medium tracking-widest uppercase text-primary">About</span>
               <h2 className="font-display text-4xl md:text-5xl font-semibold leading-tight">
