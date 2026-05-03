@@ -115,7 +115,10 @@ const Index = () => {
                 Cold-pressed in Manchester.
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                [Add a short paragraph about Phresh here — your story, your approach, what makes your juice different. Edit this text to suit your brand voice.]
+                PHRESH was created to make healthy choices easier, quicker and less boring. We wanted to create juices and wellness shots that actually taste good, look good and fit into real life. Every bottle is freshly made in Manchester using cold-pressed ingredients, with no added nasties, just simple, fresh juice designed to help you feel your best.
+              </p>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                We offer a range of different flavours, each with its own health benefits, whether you're looking for more energy, to rehydrate, improved digestion, immunity support or just a fresh reset. Whether you need a boost or something to add to your routine, PHRESH is here to make it easy.
               </p>
             </div>
           </div>
