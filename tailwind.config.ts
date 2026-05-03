@@ -25,7 +25,7 @@ export default {
           dark: "hsl(var(--primary-dark))",
           soft: "hsl(var(--primary-soft))",
         },
-        fontFamily: undefined,
+        
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
