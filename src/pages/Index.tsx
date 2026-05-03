@@ -47,27 +47,24 @@ const Index = () => {
       {/* Hero */}
       <section id="top" className="pt-28 md:pt-32 pb-20 md:pb-28">
         <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-soft text-primary text-sm font-medium">
-                <MapPin className="w-4 h-4" /> Manchester, UK
-              </div>
-              <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-semibold leading-[0.95] text-foreground">
-                Phresh
-              </h1>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-md leading-relaxed">
-                [Add your tagline here — a short, memorable line about your juice.]
-              </p>
-              <div className="flex flex-wrap gap-3 pt-2">
-                <a href="#juices" className="px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary-dark transition-colors shadow-[var(--shadow-soft)]">
-                  Explore Juices
-                </a>
-                <a href="#connect" className="px-7 py-3.5 rounded-full border border-primary/30 text-primary font-medium hover:bg-primary-soft transition-colors">
-                  Order
-                </a>
-              </div>
+          <div className="max-w-3xl mx-auto text-center space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-soft text-primary text-sm font-medium">
+              <MapPin className="w-4 h-4" /> Manchester, UK
             </div>
-            <UploadBox label="Hero Image" className="aspect-[4/5] w-full" />
+            <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-semibold leading-[0.95] text-foreground">
+              Phresh
+            </h1>
+            <p className="text-lg md:text-xl text-muted-foreground max-w-md mx-auto leading-relaxed">
+              [Add your tagline here — a short, memorable line about your juice.]
+            </p>
+            <div className="flex flex-wrap gap-3 pt-2 justify-center">
+              <a href="#juices" className="px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary-dark transition-colors shadow-[var(--shadow-soft)]">
+                Explore Juices
+              </a>
+              <a href="#connect" className="px-7 py-3.5 rounded-full border border-primary/30 text-primary font-medium hover:bg-primary-soft transition-colors">
+                Order
+              </a>
+            </div>
           </div>
         </div>
       </section>
