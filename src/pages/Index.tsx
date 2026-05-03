@@ -1,11 +1,17 @@
 import { Instagram, MapPin } from "lucide-react";
+import logo from "@/assets/phresh-logo.jpg";
+import juice1 from "@/assets/juice-1.jpeg";
+import juice2 from "@/assets/juice-2.jpeg";
+import juice3 from "@/assets/juice-3.jpeg";
+import juice4 from "@/assets/juice-4.jpeg";
+import juice5 from "@/assets/juice-5.jpeg";
 
 const juices = [
-  { n: "Juice 1", ingredients: ["Apple", "Beetroot", "Carrot", "Lemon", "Cucumber"] },
-  { n: "Juice 2", ingredients: ["Apple", "Celery", "Lemon", "Cucumber", "Lime"] },
-  { n: "Juice 3", ingredients: ["Seeded Grape"] },
-  { n: "Juice 4", ingredients: ["Ginger", "Lime", "Lemon"] },
-  { n: "Juice 5", ingredients: ["Watermelon", "Lemon", "Lime"] },
+  { n: "Juice 1", img: juice1, ingredients: ["Apple", "Beetroot", "Carrot", "Lemon", "Cucumber"] },
+  { n: "Juice 2", img: juice2, ingredients: ["Apple", "Celery", "Lemon", "Cucumber", "Lime"] },
+  { n: "Juice 3", img: juice3, ingredients: ["Seeded Grape"] },
+  { n: "Juice 4", img: juice4, ingredients: ["Ginger", "Lime", "Lemon"] },
+  { n: "Juice 5", img: juice5, ingredients: ["Watermelon", "Lemon", "Lime"] },
 ];
 
 const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
@@ -25,8 +31,11 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* Nav */}
       <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
-        <div className="container mx-auto flex items-center justify-between py-4">
-          <a href="#top" className="font-display text-2xl font-semibold text-primary">Phresh</a>
+        <div className="container mx-auto flex items-center justify-between py-3">
+          <a href="#top" className="flex items-center gap-3">
+            <img src={logo} alt="Phresh logo" className="w-10 h-10 rounded-full object-cover" />
+            <span className="font-display text-2xl font-semibold text-primary">Phresh</span>
+          </a>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             <a href="#juices" className="hover:text-primary transition-colors">Juices</a>
             <a href="#about" className="hover:text-primary transition-colors">About</a>
@@ -75,7 +84,9 @@ const Index = () => {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {juices.map((j) => (
               <article key={j.n} className="bg-card rounded-2xl overflow-hidden shadow-[var(--shadow-card)] hover:-translate-y-1 transition-transform duration-300">
-                <UploadBox label={`${j.n} Photo`} className="aspect-square w-full rounded-none border-x-0 border-t-0" />
+                <div className="aspect-[3/4] w-full overflow-hidden bg-muted">
+                  <img src={j.img} alt={`${j.n} — ${j.ingredients.join(", ")}`} className="w-full h-full object-cover" loading="lazy" />
+                </div>
                 <div className="p-6">
                   <h3 className="font-display text-2xl font-semibold mb-4 text-foreground">{j.n}</h3>
                   <ul className="space-y-1.5">
@@ -141,10 +152,13 @@ const Index = () => {
       {/* Footer */}
       <footer className="border-t border-border py-10">
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-center md:text-left">
-            <div className="font-display text-2xl font-semibold text-primary">Phresh</div>
-            <div className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5 justify-center md:justify-start">
-              <MapPin className="w-3.5 h-3.5" /> Manchester, UK
+          <div className="flex items-center gap-3">
+            <img src={logo} alt="Phresh logo" className="w-12 h-12 rounded-full object-cover" />
+            <div>
+              <div className="font-display text-2xl font-semibold text-primary leading-none">Phresh</div>
+              <div className="text-sm text-muted-foreground mt-1 flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5" /> Manchester, UK
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-3">
