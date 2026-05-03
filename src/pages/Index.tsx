@@ -55,7 +55,10 @@ const Index = () => {
               Phresh
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-md mx-auto leading-relaxed">
-              [Add your tagline here — a short, memorable line about your juice.]
+              Cold-Pressed Juices & Wellness Shots<br />
+              Made fresh in Manchester • Delivered nationwide<br />
+              No preservatives, just real ingredients.<br />
+              DM to order
             </p>
             <div className="flex flex-wrap gap-3 pt-2 justify-center">
               <a href="#juices" className="px-7 py-3.5 rounded-full bg-primary text-primary-foreground font-medium hover:bg-primary-dark transition-colors shadow-[var(--shadow-soft)]">
