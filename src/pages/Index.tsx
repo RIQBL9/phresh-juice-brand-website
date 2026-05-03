@@ -39,7 +39,7 @@ const Index = () => {
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
             <a href="#juices" className="hover:text-primary transition-colors">Juices</a>
             <a href="#about" className="hover:text-primary transition-colors">About</a>
-            <a href="#connect" className="hover:text-primary transition-colors">Connect</a>
+            <a href="#connect" className="hover:text-primary transition-colors">Order</a>
           </nav>
         </div>
       </header>
