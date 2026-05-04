@@ -363,10 +363,10 @@ const Index = () => {
             <WhatsAppIcon className="w-5 h-5" /> WhatsApp
           </a>
           <a
-            href="mailto:phreshmcr@outlook.com"
+            href="mailto:hello@phreshmcr.uk"
             className="inline-flex items-center gap-2 font-medium text-white transition-opacity hover:opacity-70"
           >
-            <Mail className="w-5 h-5" /> phreshmcr@outlook.com
+            <Mail className="w-5 h-5" /> hello@phreshmcr.uk
           </a>
         </div>
       </section>
