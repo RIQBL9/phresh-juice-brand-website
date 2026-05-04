@@ -17,11 +17,11 @@ const LG = "#e8f2d4";
 const MG = "#97ad5b";
 
 const juices = [
-  { id: 1, img: juice1, name: "Juice 1", ingredients: ["Apple", "Beetroot", "Carrot", "Lemon", "Cucumber"] },
-  { id: 2, img: juice2, name: "Juice 2", ingredients: ["Apple", "Celery", "Lemon", "Cucumber", "Lime"] },
-  { id: 3, img: juice3, name: "Juice 3", ingredients: ["Seeded Grape"] },
-  { id: 4, img: juice4, name: "Juice 4", ingredients: ["Ginger", "Lime", "Lemon"] },
-  { id: 5, img: juice5, name: "Juice 5", ingredients: ["Watermelon", "Lemon", "Lime"] },
+  { id: 1, img: juice1, name: "Revitalise", ingredients: ["Apple", "Beetroot", "Carrot", "Lemon", "Cucumber"] },
+  { id: 2, img: juice2, name: "Revive Green", ingredients: ["Apple", "Celery", "Lemon", "Cucumber", "Lime"] },
+  { id: 3, img: juice3, name: "Resist Grape", ingredients: ["Seeded Grape"] },
+  { id: 4, img: juice4, name: "Immunity", ingredients: ["Ginger", "Lime", "Lemon"] },
+  { id: 5, img: juice5, name: "Rehydrate", ingredients: ["Watermelon", "Lemon", "Lime"] },
 ];
 
 const stripeLinks: Record<number, string> = {
