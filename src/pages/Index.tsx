@@ -68,12 +68,9 @@ const Index = () => {
     e.preventDefault();
     setNlStatus("loading");
     try {
-      const res = await fetch("https://connect.mailerlite.com/api/subscribers", {
+      const res = await fetch("/api/subscribe", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_MAILERLITE_API_KEY}`,
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
       if (res.ok) {
