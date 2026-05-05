@@ -253,7 +253,7 @@ const Index = () => {
       </section>
 
       {/* ── Why Phresh Works ── */}
-      <section style={{ background: "white" }} className="py-20 md:py-28">
+      <section style={{ background: "white" }} className="pt-20 md:pt-28">
         <div className="container mx-auto px-4">
           <h2 className="font-display text-4xl md:text-5xl font-bold text-center mb-16" style={{ color: DG }}>
             Why Phresh Works
@@ -278,7 +278,7 @@ const Index = () => {
       </section>
 
       {/* ── Community ── */}
-      <section id="community" style={{ background: MG }} className="py-20 md:py-28">
+      <section id="community" style={{ background: MG }} className="pt-20 md:pt-28">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-display text-4xl md:text-5xl font-bold text-white">
