@@ -38,12 +38,12 @@ const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
   </svg>
 );
 
-const TornEdge = ({ fill }: { fill: string }) => (
-  <div style={{ lineHeight: 0 }}>
-    <svg viewBox="0 0 1440 56" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: "56px" }}>
+const TornEdge = ({ from, to }: { from: string; to: string }) => (
+  <div style={{ background: from, lineHeight: 0, display: "block" }}>
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: "60px" }}>
       <path
-        d="M0,32 C80,12 160,50 240,28 C320,8 400,46 480,24 C560,6 640,44 720,26 C800,10 880,48 960,26 C1040,8 1120,44 1200,28 C1280,12 1360,48 1440,28 L1440,56 L0,56 Z"
-        fill={fill}
+        d="M0,30 C80,10 160,50 240,28 C320,8 400,46 480,24 C560,6 640,44 720,26 C800,10 880,48 960,26 C1040,8 1120,44 1200,28 C1280,12 1360,48 1440,28 L1440,60 L0,60 Z"
+        fill={to}
       />
     </svg>
   </div>
@@ -186,7 +186,7 @@ const Index = () => {
             <Placeholder label="Hero Juice Bottles Image" className="aspect-[4/5] w-full" />
           </div>
         </div>
-        <TornEdge fill={CREAM} />
+        <TornEdge from={DG} to={CREAM} />
       </section>
 
       {/* ── About ── */}
@@ -209,7 +209,7 @@ const Index = () => {
             />
           </div>
         </div>
-        <TornEdge fill={LG} />
+        <TornEdge from={CREAM} to={LG} />
       </section>
 
       {/* ── Best Sellers ── */}
@@ -249,7 +249,7 @@ const Index = () => {
             ))}
           </div>
         </div>
-        <TornEdge fill="white" />
+        <TornEdge from={LG} to="white" />
       </section>
 
       {/* ── Why Phresh Works ── */}
@@ -274,7 +274,7 @@ const Index = () => {
             ))}
           </div>
         </div>
-        <TornEdge fill={MG} />
+        <TornEdge from="white" to={MG} />
       </section>
 
       {/* ── Community ── */}
@@ -295,7 +295,7 @@ const Index = () => {
             Tag us @phreshmcr to be featured!
           </p>
         </div>
-        <TornEdge fill={DG} />
+        <TornEdge from={MG} to={DG} />
       </section>
 
       {/* ── Newsletter ── */}
