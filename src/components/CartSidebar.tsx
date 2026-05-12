@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { X, Minus, Plus, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { X, Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 const DG = "#2d5a27";
@@ -8,12 +8,43 @@ const MG = "#97ad5b";
 const fmt = (pence: number) =>
   new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(pence / 100);
 
+const isManchesterPostcode = (postcode: string) => {
+  const cleaned = postcode.trim().toUpperCase();
+  return cleaned.startsWith("M") && !cleaned.startsWith("MK");
+};
+
+type Step = "cart" | "delivery";
+
 const CartSidebar = () => {
   const { items, isOpen, closeCart, updateQuantity, removeItem, subtotal } = useCart();
+
+  const [step, setStep] = useState<Step>("cart");
+  const [name, setName] = useState("");
+  const [postcode, setPostcode] = useState("");
+  const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const handleCheckout = async () => {
+  useEffect(() => {
+    if (!isOpen) {
+      const t = setTimeout(() => {
+        setStep("cart");
+        setError(false);
+      }, 300);
+      return () => clearTimeout(t);
+    }
+  }, [isOpen]);
+
+  const deliveryCost: number | null =
+    postcode.trim().length >= 2
+      ? isManchesterPostcode(postcode)
+        ? 0
+        : 500
+      : null;
+
+  const handleDeliverySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const shipping = isManchesterPostcode(postcode) ? 0 : 500;
     setLoading(true);
     setError(false);
     try {
@@ -22,6 +53,7 @@ const CartSidebar = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           items: items.map((i) => ({ name: i.name, price: i.price, quantity: i.quantity })),
+          shipping,
         }),
       });
       const data = await res.json();
@@ -37,9 +69,11 @@ const CartSidebar = () => {
     }
   };
 
+  const inputClass = "w-full px-4 py-3 rounded-lg text-sm border outline-none transition-colors focus:border-[#2d5a27]";
+  const inputStyle = { borderColor: "#d1d5db", color: "#111" };
+
   return (
     <>
-      {/* Overlay */}
       <div
         className={`fixed inset-0 z-40 bg-black/50 transition-opacity duration-300 ${
           isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
@@ -48,7 +82,6 @@ const CartSidebar = () => {
         aria-hidden="true"
       />
 
-      {/* Drawer */}
       <div
         role="dialog"
         aria-modal="true"
@@ -58,107 +91,194 @@ const CartSidebar = () => {
         }`}
         style={{ background: "white" }}
       >
-        {/* Header */}
-        <div
-          className="flex items-center justify-between px-6 py-4 border-b"
-          style={{ borderColor: "#e5e7eb" }}
-        >
-          <h2 className="font-display text-2xl font-bold" style={{ color: DG }}>
-            Your Cart
-          </h2>
-          <button
-            onClick={closeCart}
-            aria-label="Close cart"
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+        {step === "cart" && (
+          <>
+            <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: "#e5e7eb" }}>
+              <h2 className="font-display text-2xl font-bold" style={{ color: DG }}>Your Cart</h2>
+              <button onClick={closeCart} aria-label="Close cart" className="text-gray-400 hover:text-gray-600 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-        {/* Items */}
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-1">
-          {items.length === 0 ? (
-            <p className="text-gray-400 text-sm text-center mt-16">Your cart is empty.</p>
-          ) : (
-            items.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-3 py-4 border-b"
-                style={{ borderColor: "#f3f4f6" }}
-              >
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm truncate" style={{ color: DG }}>
-                    {item.name}
-                  </p>
-                  <p className="text-xs text-gray-400 mt-0.5">{fmt(item.price)} each</p>
+            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-1">
+              {items.length === 0 ? (
+                <p className="text-gray-400 text-sm text-center mt-16">Your cart is empty.</p>
+              ) : (
+                items.map((item) => (
+                  <div key={item.id} className="flex items-center gap-3 py-4 border-b" style={{ borderColor: "#f3f4f6" }}>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm truncate" style={{ color: DG }}>{item.name}</p>
+                      <p className="text-xs text-gray-400 mt-0.5">{fmt(item.price)} each</p>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        disabled={item.quantity <= 1}
+                        aria-label="Decrease quantity"
+                        className="w-7 h-7 rounded-full border flex items-center justify-center transition-colors hover:border-[#97ad5b] disabled:opacity-30"
+                        style={{ borderColor: "#d1d5db" }}
+                      >
+                        <Minus className="w-3 h-3" />
+                      </button>
+                      <span className="w-6 text-center text-sm font-medium">{item.quantity}</span>
+                      <button
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        aria-label="Increase quantity"
+                        className="w-7 h-7 rounded-full border flex items-center justify-center transition-colors hover:border-[#97ad5b]"
+                        style={{ borderColor: "#d1d5db" }}
+                      >
+                        <Plus className="w-3 h-3" />
+                      </button>
+                    </div>
+                    <p className="text-sm font-semibold w-14 text-right" style={{ color: DG }}>
+                      {fmt(item.price * item.quantity)}
+                    </p>
+                    <button
+                      onClick={() => removeItem(item.id)}
+                      aria-label={`Remove ${item.name}`}
+                      className="text-gray-300 hover:text-red-400 transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {items.length > 0 && (
+              <div className="px-6 py-5 border-t" style={{ borderColor: "#e5e7eb" }}>
+                <div className="flex justify-between items-center mb-4">
+                  <span className="font-semibold text-gray-600 text-sm">Subtotal</span>
+                  <span className="font-bold text-xl" style={{ color: DG }}>{fmt(subtotal)}</span>
                 </div>
-
-                {/* Quantity controls */}
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                    disabled={item.quantity <= 1}
-                    aria-label="Decrease quantity"
-                    className="w-7 h-7 rounded-full border flex items-center justify-center transition-colors hover:border-[#97ad5b] disabled:opacity-30"
-                    style={{ borderColor: "#d1d5db" }}
-                  >
-                    <Minus className="w-3 h-3" />
-                  </button>
-                  <span className="w-6 text-center text-sm font-medium">{item.quantity}</span>
-                  <button
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    aria-label="Increase quantity"
-                    className="w-7 h-7 rounded-full border flex items-center justify-center transition-colors hover:border-[#97ad5b]"
-                    style={{ borderColor: "#d1d5db" }}
-                  >
-                    <Plus className="w-3 h-3" />
-                  </button>
-                </div>
-
-                {/* Line total */}
-                <p className="text-sm font-semibold w-14 text-right" style={{ color: DG }}>
-                  {fmt(item.price * item.quantity)}
-                </p>
-
-                {/* Remove */}
                 <button
-                  onClick={() => removeItem(item.id)}
-                  aria-label={`Remove ${item.name}`}
-                  className="text-gray-300 hover:text-red-400 transition-colors"
+                  onClick={() => setStep("delivery")}
+                  className="w-full py-3.5 rounded-lg font-semibold text-white transition-opacity hover:opacity-80"
+                  style={{ background: DG }}
                 >
-                  <Trash2 className="w-4 h-4" />
+                  Proceed to Checkout
                 </button>
               </div>
-            ))
-          )}
-        </div>
-
-        {/* Footer */}
-        {items.length > 0 && (
-          <div className="px-6 py-5 border-t" style={{ borderColor: "#e5e7eb" }}>
-            <div className="flex justify-between items-center mb-4">
-              <span className="font-semibold text-gray-600 text-sm">Subtotal</span>
-              <span className="font-bold text-xl" style={{ color: DG }}>
-                {fmt(subtotal)}
-              </span>
-            </div>
-            {error && (
-              <p className="text-red-500 text-xs mb-3 text-center">
-                Something went wrong. Please try again.
-              </p>
             )}
-            <button
-              onClick={handleCheckout}
-              disabled={loading}
-              className="w-full py-3.5 rounded-lg font-semibold text-white transition-opacity hover:opacity-80 disabled:opacity-50"
-              style={{ background: DG }}
-            >
-              {loading ? "Redirecting to checkout..." : "Checkout"}
-            </button>
-            <p className="text-xs text-gray-400 text-center mt-3">
-              Prices shown are placeholders — confirm at checkout.
-            </p>
-          </div>
+          </>
+        )}
+
+        {step === "delivery" && (
+          <>
+            <div className="flex items-center justify-between px-6 py-4 border-b" style={{ borderColor: "#e5e7eb" }}>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => { setStep("cart"); setError(false); }}
+                  aria-label="Back to cart"
+                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+                <h2 className="font-display text-2xl font-bold" style={{ color: DG }}>Delivery</h2>
+              </div>
+              <button onClick={closeCart} aria-label="Close cart" className="text-gray-400 hover:text-gray-600 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-6 py-6">
+              <p className="text-sm text-gray-500 mb-6">
+                Enter your details below. We'll calculate your delivery cost based on your postcode.
+              </p>
+
+              <form id="delivery-form" onSubmit={handleDeliverySubmit} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: DG }}>
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Jane Smith"
+                    required
+                    className={inputClass}
+                    style={inputStyle}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: DG }}>
+                    Postcode
+                  </label>
+                  <input
+                    type="text"
+                    value={postcode}
+                    onChange={(e) => setPostcode(e.target.value)}
+                    placeholder="M1 1AE"
+                    required
+                    className={inputClass}
+                    style={inputStyle}
+                  />
+                  {deliveryCost !== null && (
+                    <div
+                      className="mt-2 px-3 py-2 rounded-lg text-sm font-medium"
+                      style={{
+                        background: deliveryCost === 0 ? "rgba(151,173,91,0.12)" : "rgba(45,90,39,0.06)",
+                        color: deliveryCost === 0 ? "#2d5a27" : "#555",
+                        border: `1px solid ${deliveryCost === 0 ? MG : "#e5e7eb"}`,
+                      }}
+                    >
+                      {deliveryCost === 0 ? "✓ Free delivery to Manchester" : "£5.00 delivery charge applies"}
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: DG }}>
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="07700 900000"
+                    required
+                    className={inputClass}
+                    style={inputStyle}
+                  />
+                </div>
+              </form>
+            </div>
+
+            <div className="px-6 py-5 border-t" style={{ borderColor: "#e5e7eb" }}>
+              <div className="space-y-1.5 mb-4">
+                <div className="flex justify-between text-sm text-gray-500">
+                  <span>Subtotal</span>
+                  <span>{fmt(subtotal)}</span>
+                </div>
+                <div className="flex justify-between text-sm text-gray-500">
+                  <span>Delivery</span>
+                  <span style={{ color: deliveryCost === 0 ? MG : undefined }}>
+                    {deliveryCost === null ? "—" : deliveryCost === 0 ? "Free" : fmt(deliveryCost)}
+                  </span>
+                </div>
+                <div className="flex justify-between font-bold text-base pt-1 border-t" style={{ borderColor: "#f3f4f6", color: DG }}>
+                  <span>Total</span>
+                  <span>{deliveryCost !== null ? fmt(subtotal + deliveryCost) : "—"}</span>
+                </div>
+              </div>
+
+              {error && (
+                <p className="text-red-500 text-xs mb-3 text-center">Something went wrong. Please try again.</p>
+              )}
+
+              <button
+                type="submit"
+                form="delivery-form"
+                disabled={loading}
+                className="w-full py-3.5 rounded-lg font-semibold text-white transition-opacity hover:opacity-80 disabled:opacity-50"
+                style={{ background: DG }}
+              >
+                {loading ? "Redirecting to checkout..." : "Pay Now"}
+              </button>
+            </div>
+          </>
         )}
       </div>
     </>
