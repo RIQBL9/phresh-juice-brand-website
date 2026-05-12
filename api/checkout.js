@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { items, shipping } = req.body;
+  const { items, shipping, metadata } = req.body;
 
   if (!items || !items.length) {
     return res.status(400).json({ error: 'No items provided' });
@@ -26,8 +26,8 @@ export default async function handler(req, res) {
     lineItems.push({
       price_data: {
         currency: 'gbp',
-        product_data: { name: 'UK Delivery' },
-        unit_amount: shipping,
+        product_data: { name: 'UK Next Day Delivery' },
+        unit_amount: 1099,
       },
       quantity: 1,
     });
@@ -40,6 +40,12 @@ export default async function handler(req, res) {
       mode: 'payment',
       shipping_address_collection: {
         allowed_countries: ['GB'],
+      },
+      metadata: {
+        customer_name: metadata?.customer_name ?? '',
+        customer_phone: metadata?.customer_phone ?? '',
+        delivery_postcode: metadata?.delivery_postcode ?? '',
+        delivery_notes: metadata?.delivery_notes ?? '',
       },
       success_url: `${process.env.VITE_SITE_URL}/success`,
       cancel_url: `${process.env.VITE_SITE_URL}/`,

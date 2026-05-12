@@ -13,6 +13,8 @@ const isManchesterPostcode = (postcode: string) => {
   return cleaned.startsWith("M") && !cleaned.startsWith("MK");
 };
 
+const DELIVERY_CHARGE = 1099;
+
 type Step = "cart" | "delivery";
 
 const CartSidebar = () => {
@@ -22,6 +24,7 @@ const CartSidebar = () => {
   const [name, setName] = useState("");
   const [postcode, setPostcode] = useState("");
   const [phone, setPhone] = useState("");
+  const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
@@ -35,16 +38,13 @@ const CartSidebar = () => {
     }
   }, [isOpen]);
 
+  const isManchester = postcode.trim().length >= 2 ? isManchesterPostcode(postcode) : null;
   const deliveryCost: number | null =
-    postcode.trim().length >= 2
-      ? isManchesterPostcode(postcode)
-        ? 0
-        : 500
-      : null;
+    isManchester === null ? null : isManchester ? 0 : DELIVERY_CHARGE;
 
   const handleDeliverySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const shipping = isManchesterPostcode(postcode) ? 0 : 500;
+    const shipping = isManchesterPostcode(postcode) ? 0 : DELIVERY_CHARGE;
     setLoading(true);
     setError(false);
     try {
@@ -54,6 +54,12 @@ const CartSidebar = () => {
         body: JSON.stringify({
           items: items.map((i) => ({ name: i.name, price: i.price, quantity: i.quantity })),
           shipping,
+          metadata: {
+            customer_name: name,
+            customer_phone: phone,
+            delivery_postcode: postcode,
+            delivery_notes: notes,
+          },
         }),
       });
       const data = await res.json();
@@ -71,6 +77,7 @@ const CartSidebar = () => {
 
   const inputClass = "w-full px-4 py-3 rounded-lg text-sm border outline-none transition-colors focus:border-[#2d5a27]";
   const inputStyle = { borderColor: "#d1d5db", color: "#111" };
+  const labelClass = "block text-xs font-semibold mb-1.5 uppercase tracking-wide";
 
   return (
     <>
@@ -188,9 +195,7 @@ const CartSidebar = () => {
 
               <form id="delivery-form" onSubmit={handleDeliverySubmit} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: DG }}>
-                    Full Name
-                  </label>
+                  <label className={labelClass} style={{ color: DG }}>Full Name</label>
                   <input
                     type="text"
                     value={name}
@@ -203,9 +208,7 @@ const CartSidebar = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: DG }}>
-                    Postcode
-                  </label>
+                  <label className={labelClass} style={{ color: DG }}>Postcode</label>
                   <input
                     type="text"
                     value={postcode}
@@ -217,22 +220,24 @@ const CartSidebar = () => {
                   />
                   {deliveryCost !== null && (
                     <div
-                      className="mt-2 px-3 py-2 rounded-lg text-sm font-medium"
+                      className="mt-2 px-3 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2"
                       style={{
                         background: deliveryCost === 0 ? "rgba(151,173,91,0.12)" : "rgba(45,90,39,0.06)",
-                        color: deliveryCost === 0 ? "#2d5a27" : "#555",
+                        color: deliveryCost === 0 ? DG : "#555",
                         border: `1px solid ${deliveryCost === 0 ? MG : "#e5e7eb"}`,
                       }}
                     >
-                      {deliveryCost === 0 ? "✓ Free delivery to Manchester" : "£5.00 delivery charge applies"}
+                      {deliveryCost === 0 ? (
+                        <>&#x2705; Free local Manchester delivery</>
+                      ) : (
+                        <>&#x1F69A; UK Next Day Delivery — £10.99</>
+                      )}
                     </div>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5 uppercase tracking-wide" style={{ color: DG }}>
-                    Phone Number
-                  </label>
+                  <label className={labelClass} style={{ color: DG }}>Phone Number</label>
                   <input
                     type="tel"
                     value={phone}
@@ -241,6 +246,21 @@ const CartSidebar = () => {
                     required
                     className={inputClass}
                     style={inputStyle}
+                  />
+                </div>
+
+                <div>
+                  <label className={labelClass} style={{ color: DG }}>
+                    Delivery Notes{" "}
+                    <span className="normal-case font-normal text-gray-400">(optional)</span>
+                  </label>
+                  <textarea
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    placeholder="e.g. Leave at door, ring bell, safe place..."
+                    rows={3}
+                    className={inputClass}
+                    style={{ ...inputStyle, resize: "none" }}
                   />
                 </div>
               </form>
@@ -258,7 +278,7 @@ const CartSidebar = () => {
                     {deliveryCost === null ? "—" : deliveryCost === 0 ? "Free" : fmt(deliveryCost)}
                   </span>
                 </div>
-                <div className="flex justify-between font-bold text-base pt-1 border-t" style={{ borderColor: "#f3f4f6", color: DG }}>
+                <div className="flex justify-between font-bold text-base pt-1.5 border-t" style={{ borderColor: "#f3f4f6", color: DG }}>
                   <span>Total</span>
                   <span>{deliveryCost !== null ? fmt(subtotal + deliveryCost) : "—"}</span>
                 </div>
@@ -275,7 +295,7 @@ const CartSidebar = () => {
                 className="w-full py-3.5 rounded-lg font-semibold text-white transition-opacity hover:opacity-80 disabled:opacity-50"
                 style={{ background: DG }}
               >
-                {loading ? "Redirecting to checkout..." : "Pay Now"}
+                {loading ? "Redirecting to checkout..." : "Proceed to Payment"}
               </button>
             </div>
           </>
