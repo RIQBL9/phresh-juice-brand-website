@@ -19,11 +19,11 @@ const LG = "#e8f2d4";
 const MG = "#97ad5b";
 
 const juices = [
-  { id: 1, img: juice1, name: "Revitalise", price: 100, ingredients: ["Apple", "Beetroot", "Carrot", "Lemon", "Cucumber"] },
-  { id: 2, img: juice2, name: "Revive Green", price: 100, ingredients: ["Apple", "Celery", "Lemon", "Cucumber", "Lime"] },
-  { id: 3, img: juice3, name: "Resist Grape", price: 100, ingredients: ["Seeded Grape"] },
-  { id: 4, img: juice4, name: "Immunity", price: 100, ingredients: ["Ginger", "Lime", "Lemon"] },
-  { id: 5, img: juice5, name: "Rehydrate", price: 100, ingredients: ["Watermelon", "Lemon", "Lime"] },
+  { id: 1, img: juice1, name: "Revitalise", price: 600, ingredients: ["Apple", "Beetroot", "Carrot", "Lemon", "Cucumber"] },
+  { id: 2, img: juice2, name: "Revive Green", price: 600, ingredients: ["Apple", "Celery", "Lemon", "Cucumber", "Lime"] },
+  { id: 3, img: juice3, name: "Resist Grape", price: 600, ingredients: ["Seeded Grape"] },
+  { id: 4, img: juice4, name: "Immunity", price: 600, ingredients: ["Ginger", "Lime", "Lemon"] },
+  { id: 5, img: juice5, name: "Rehydrate", price: 600, ingredients: ["Watermelon", "Lemon", "Lime"] },
 ];
 
 type Juice = typeof juices[0];
@@ -51,7 +51,7 @@ const JuiceCard = ({ juice }: { juice: Juice }) => {
       <div className="p-6 space-y-4">
         <h3 className="font-display text-2xl font-bold" style={{ color: DG }}>{juice.name}</h3>
         <p className="text-sm text-gray-500">{juice.ingredients.join(" · ")}</p>
-        <p className="font-semibold" style={{ color: DG }}>£1.00</p>
+        <p className="font-semibold" style={{ color: DG }}>£6.00</p>
 
         <div className="flex items-center gap-3">
           <button
