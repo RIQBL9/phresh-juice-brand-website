@@ -12,6 +12,11 @@ import juice4 from "@/assets/juice-4.jpeg";
 import juice5 from "@/assets/juice-5.jpeg";
 import aboutImg from "@/assets/IMG_7724.jpeg";
 import heroImg from "@/assets/hero-lifestyle.jpeg";
+import community1 from "@/assets/community1.jpeg";
+import community2 from "@/assets/community2.jpeg";
+import community3 from "@/assets/community3.jpeg";
+import community4 from "@/assets/community4.jpeg";
+import community5 from "@/assets/community5.jpeg";
 import { useCart } from "@/context/CartContext";
 
 const DG = "#2d5a27";
@@ -335,9 +340,16 @@ const Index = () => {
             </h2>
             <p className="text-white/80 italic text-lg mt-2">Manchester Strong, Manchester Fresh</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[1, 2, 3, 4].map((n) => (
-              <Placeholder key={n} label={`Community Photo ${n}`} className="aspect-[3/4] w-full" />
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {[community1, community2, community3, community4, community5].map((src, i) => (
+              <div key={i} className="aspect-[3/4] w-full rounded-xl overflow-hidden">
+                <img
+                  src={src}
+                  alt={`Phresh community photo ${i + 1}`}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
             ))}
           </div>
           <p className="text-center text-white font-medium mt-8 text-sm tracking-wide">
