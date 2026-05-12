@@ -11,6 +11,7 @@ import juice3 from "@/assets/juice-3.jpeg";
 import juice4 from "@/assets/juice-4.jpeg";
 import juice5 from "@/assets/juice-5.jpeg";
 import aboutImg from "@/assets/IMG_7724.jpeg";
+import heroImg from "@/assets/hero-lifestyle.jpeg";
 import { useCart } from "@/context/CartContext";
 
 const DG = "#2d5a27";
@@ -250,7 +251,13 @@ const Index = () => {
                 </a>
               </div>
             </div>
-            <Placeholder label="Hero Juice Bottles Image" className="aspect-[4/5] w-full" />
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square w-full">
+              <img
+                src={heroImg}
+                alt="Phresh cold-pressed juices lifestyle"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
         </div>
         <TornEdge from={DG} to={CREAM} />
