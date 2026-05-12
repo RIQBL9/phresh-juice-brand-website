@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   Instagram, MapPin, ShoppingCart, ChevronDown,
   Truck, Droplets, Sparkles, Menu, X, Mail, Leaf,
+  Minus, Plus,
 } from "lucide-react";
 import logo from "@/assets/phresh-logo.jpg";
 import juice1 from "@/assets/juice-1.jpeg";
@@ -10,6 +11,7 @@ import juice3 from "@/assets/juice-3.jpeg";
 import juice4 from "@/assets/juice-4.jpeg";
 import juice5 from "@/assets/juice-5.jpeg";
 import aboutImg from "@/assets/IMG_7724.jpeg";
+import { useCart } from "@/context/CartContext";
 
 const DG = "#2d5a27";
 const CREAM = "#f5f0e8";
@@ -17,19 +19,71 @@ const LG = "#e8f2d4";
 const MG = "#97ad5b";
 
 const juices = [
-  { id: 1, img: juice1, name: "Revitalise", ingredients: ["Apple", "Beetroot", "Carrot", "Lemon", "Cucumber"] },
-  { id: 2, img: juice2, name: "Revive Green", ingredients: ["Apple", "Celery", "Lemon", "Cucumber", "Lime"] },
-  { id: 3, img: juice3, name: "Resist Grape", ingredients: ["Seeded Grape"] },
-  { id: 4, img: juice4, name: "Immunity", ingredients: ["Ginger", "Lime", "Lemon"] },
-  { id: 5, img: juice5, name: "Rehydrate", ingredients: ["Watermelon", "Lemon", "Lime"] },
+  { id: 1, img: juice1, name: "Revitalise", price: 0, ingredients: ["Apple", "Beetroot", "Carrot", "Lemon", "Cucumber"] },
+  { id: 2, img: juice2, name: "Revive Green", price: 0, ingredients: ["Apple", "Celery", "Lemon", "Cucumber", "Lime"] },
+  { id: 3, img: juice3, name: "Resist Grape", price: 0, ingredients: ["Seeded Grape"] },
+  { id: 4, img: juice4, name: "Immunity", price: 0, ingredients: ["Ginger", "Lime", "Lemon"] },
+  { id: 5, img: juice5, name: "Rehydrate", price: 0, ingredients: ["Watermelon", "Lemon", "Lime"] },
 ];
 
-const stripeLinks: Record<number, string> = {
-  1: import.meta.env.VITE_STRIPE_JUICE_1_LINK ?? "#",
-  2: import.meta.env.VITE_STRIPE_JUICE_2_LINK ?? "#",
-  3: import.meta.env.VITE_STRIPE_JUICE_3_LINK ?? "#",
-  4: import.meta.env.VITE_STRIPE_JUICE_4_LINK ?? "#",
-  5: import.meta.env.VITE_STRIPE_JUICE_5_LINK ?? "#",
+type Juice = typeof juices[0];
+
+const JuiceCard = ({ juice }: { juice: Juice }) => {
+  const { addItem, openCart } = useCart();
+  const [qty, setQty] = useState(1);
+
+  const handleAdd = () => {
+    addItem({ id: juice.id, name: juice.name, price: juice.price }, qty);
+    setQty(1);
+    openCart();
+  };
+
+  return (
+    <article className="bg-white rounded-2xl overflow-hidden shadow-md hover:-translate-y-1 transition-transform duration-300">
+      <div className="aspect-[3/4] w-full overflow-hidden">
+        <img
+          src={juice.img}
+          alt={`${juice.name} — ${juice.ingredients.join(", ")}`}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+      <div className="p-6 space-y-4">
+        <h3 className="font-display text-2xl font-bold" style={{ color: DG }}>{juice.name}</h3>
+        <p className="text-sm text-gray-500">{juice.ingredients.join(" · ")}</p>
+        <p className="font-semibold" style={{ color: DG }}>£0.00</p>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setQty((q) => Math.max(1, q - 1))}
+            disabled={qty <= 1}
+            aria-label="Decrease quantity"
+            className="w-8 h-8 rounded-full border flex items-center justify-center transition-colors disabled:opacity-30 hover:border-[#97ad5b]"
+            style={{ borderColor: DG, color: DG }}
+          >
+            <Minus className="w-3.5 h-3.5" />
+          </button>
+          <span className="w-8 text-center font-semibold text-sm">{qty}</span>
+          <button
+            onClick={() => setQty((q) => q + 1)}
+            aria-label="Increase quantity"
+            className="w-8 h-8 rounded-full border flex items-center justify-center transition-colors hover:border-[#97ad5b]"
+            style={{ borderColor: DG, color: DG }}
+          >
+            <Plus className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        <button
+          onClick={handleAdd}
+          className="w-full py-3 rounded-lg font-semibold text-white transition-opacity hover:opacity-80"
+          style={{ background: DG }}
+        >
+          Add to Cart
+        </button>
+      </div>
+    </article>
+  );
 };
 
 const WhatsAppIcon = ({ className = "" }: { className?: string }) => (
@@ -59,6 +113,7 @@ const Placeholder = ({ label, className = "" }: { label: string; className?: str
 );
 
 const Index = () => {
+  const { totalItems, openCart } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -124,9 +179,21 @@ const Index = () => {
             </div>
             <a href="#juices" className="hover:opacity-70 transition-opacity">Cleanses</a>
             <a href="#community" className="hover:opacity-70 transition-opacity">Community</a>
-            <a href="#juices" aria-label="Cart" className="hover:opacity-70 transition-opacity">
+            <button
+              onClick={openCart}
+              aria-label={`Cart (${totalItems} items)`}
+              className="relative hover:opacity-70 transition-opacity text-white"
+            >
               <ShoppingCart className="w-5 h-5" />
-            </a>
+              {totalItems > 0 && (
+                <span
+                  className="absolute -top-2 -right-2 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center text-white"
+                  style={{ background: MG }}
+                >
+                  {totalItems > 9 ? "9+" : totalItems}
+                </span>
+              )}
+            </button>
           </nav>
 
           <button
@@ -220,32 +287,7 @@ const Index = () => {
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {juices.map((j) => (
-              <article
-                key={j.id}
-                className="bg-white rounded-2xl overflow-hidden shadow-md hover:-translate-y-1 transition-transform duration-300"
-              >
-                <div className="aspect-[3/4] w-full overflow-hidden">
-                  <img
-                    src={j.img}
-                    alt={`${j.name} — ${j.ingredients.join(", ")}`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-                <div className="p-6 space-y-4">
-                  <h3 className="font-display text-2xl font-bold" style={{ color: DG }}>{j.name}</h3>
-                  <p className="text-sm text-gray-500">{j.ingredients.join(" · ")}</p>
-                  <a
-                    href={stripeLinks[j.id]}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block text-center py-3 rounded-lg font-semibold text-white transition-opacity hover:opacity-80"
-                    style={{ background: DG }}
-                  >
-                    ORDER NOW
-                  </a>
-                </div>
-              </article>
+              <JuiceCard key={j.id} juice={j} />
             ))}
           </div>
         </div>
