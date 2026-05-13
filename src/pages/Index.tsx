@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {
-  Instagram, MapPin, ShoppingCart, ChevronDown,
+  Instagram, MapPin, ShoppingCart,
   Truck, Droplets, Sparkles, Menu, X, Mail, Leaf,
   Minus, Plus,
 } from "lucide-react";
@@ -121,7 +121,6 @@ const Placeholder = ({ label, className = "" }: { label: string; className?: str
 const Index = () => {
   const { totalItems, openCart } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [shopOpen, setShopOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [nlStatus, setNlStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -165,25 +164,8 @@ const Index = () => {
 
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-white">
             <a href="#top" className="hover:opacity-70 transition-opacity">Home</a>
-            <div className="relative">
-              <button
-                className="flex items-center gap-1 hover:opacity-70 transition-opacity"
-                onClick={() => setShopOpen(!shopOpen)}
-                onBlur={() => setTimeout(() => setShopOpen(false), 150)}
-              >
-                Shop <ChevronDown className="w-3.5 h-3.5" />
-              </button>
-              {shopOpen && (
-                <div
-                  className="absolute top-full left-0 mt-2 rounded-lg shadow-xl py-2 min-w-[140px] border border-white/10"
-                  style={{ background: DG }}
-                >
-                  <a href="#juices" className="block px-4 py-2 text-white hover:opacity-70 transition-opacity">Our Juices</a>
-                  <a href="#juices" className="block px-4 py-2 text-white hover:opacity-70 transition-opacity">Wellness Shots</a>
-                </div>
-              )}
-            </div>
-            <a href="#juices" className="hover:opacity-70 transition-opacity">Cleanses</a>
+            <a href="#juices" className="hover:opacity-70 transition-opacity">Shop</a>
+            <a href="#about" className="hover:opacity-70 transition-opacity">About</a>
             <a href="#community" className="hover:opacity-70 transition-opacity">Community</a>
             <button
               onClick={openCart}
@@ -216,7 +198,7 @@ const Index = () => {
             <nav className="flex flex-col gap-3 pt-3 text-sm font-medium text-white">
               <a href="#top" onClick={() => setMobileOpen(false)} className="hover:opacity-70">Home</a>
               <a href="#juices" onClick={() => setMobileOpen(false)} className="hover:opacity-70">Shop</a>
-              <a href="#juices" onClick={() => setMobileOpen(false)} className="hover:opacity-70">Cleanses</a>
+              <a href="#about" onClick={() => setMobileOpen(false)} className="hover:opacity-70">About</a>
               <a href="#community" onClick={() => setMobileOpen(false)} className="hover:opacity-70">Community</a>
             </nav>
           </div>
@@ -445,7 +427,7 @@ const Index = () => {
           <nav className="flex flex-wrap justify-center gap-6 text-sm text-white/60">
             <a href="#top" className="hover:text-white transition-colors">Home</a>
             <a href="#juices" className="hover:text-white transition-colors">Shop</a>
-            <a href="#juices" className="hover:text-white transition-colors">Cleanses</a>
+            <a href="#about" className="hover:text-white transition-colors">About</a>
             <a href="#community" className="hover:text-white transition-colors">Community</a>
           </nav>
 
