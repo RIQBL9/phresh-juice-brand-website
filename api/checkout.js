@@ -48,7 +48,7 @@ export default async function handler(req, res) {
         delivery_notes: metadata?.delivery_notes ?? '',
       },
       success_url: `${process.env.VITE_SITE_URL}/success`,
-      cancel_url: `${process.env.VITE_SITE_URL}/`,
+      cancel_url: `${process.env.VITE_SITE_URL}/cancel`,
     });
 
     res.status(200).json({ url: session.url });
