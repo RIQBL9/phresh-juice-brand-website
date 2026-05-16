@@ -5,6 +5,7 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
+  juices?: string;
 }
 
 interface CartContextType {
@@ -45,6 +46,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === item.id);
       if (existing) {
+        // Bundles always replace (new juice selection); regular items accumulate
+        if (item.juices !== undefined) {
+          return prev.map((i) => i.id === item.id ? { ...item, quantity } : i);
+        }
         return prev.map((i) =>
           i.id === item.id ? { ...i, quantity: i.quantity + quantity } : i
         );

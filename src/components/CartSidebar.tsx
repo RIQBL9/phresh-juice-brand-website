@@ -48,6 +48,11 @@ const CartSidebar = () => {
     setLoading(true);
     setError(false);
     try {
+      const bundleSelections = items
+        .filter((i) => i.juices)
+        .map((i) => `${i.name}: ${i.juices}`)
+        .join(" | ");
+
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -59,6 +64,7 @@ const CartSidebar = () => {
             customer_phone: phone,
             delivery_postcode: postcode,
             delivery_notes: notes,
+            bundle_selections: bundleSelections,
           },
         }),
       });
@@ -112,10 +118,14 @@ const CartSidebar = () => {
                 <p className="text-gray-400 text-sm text-center mt-16">Your cart is empty.</p>
               ) : (
                 items.map((item) => (
-                  <div key={item.id} className="flex items-center gap-3 py-4 border-b" style={{ borderColor: "#f3f4f6" }}>
+                  <div key={item.id} className="flex items-start gap-3 py-4 border-b" style={{ borderColor: "#f3f4f6" }}>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-sm truncate" style={{ color: DG }}>{item.name}</p>
-                      <p className="text-xs text-gray-400 mt-0.5">{fmt(item.price)} each</p>
+                      {item.juices ? (
+                        <p className="text-xs mt-1 leading-relaxed" style={{ color: MG }}>{item.juices}</p>
+                      ) : (
+                        <p className="text-xs text-gray-400 mt-0.5">{fmt(item.price)} each</p>
+                      )}
                     </div>
                     <div className="flex items-center gap-1.5">
                       <button

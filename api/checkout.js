@@ -46,6 +46,7 @@ export default async function handler(req, res) {
         customer_phone: metadata?.customer_phone ?? '',
         delivery_postcode: metadata?.delivery_postcode ?? '',
         delivery_notes: metadata?.delivery_notes ?? '',
+        bundle_selections: metadata?.bundle_selections ?? '',
       },
       success_url: `${process.env.VITE_SITE_URL}/success`,
       cancel_url: `${process.env.VITE_SITE_URL}/cancel`,
