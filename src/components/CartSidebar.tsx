@@ -28,7 +28,7 @@ const CartSidebar = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<{ id: string; percent_off: number | null; amount_off: number | null } | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<{ id: string; promotionCodeId: string | null; percent_off: number | null; amount_off: number | null } | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState(false);
 
@@ -63,7 +63,7 @@ const CartSidebar = () => {
       });
       const data = await res.json();
       if (data.valid) {
-        setAppliedCoupon({ id: code, percent_off: data.discount.percent_off, amount_off: data.discount.amount_off });
+        setAppliedCoupon({ id: code, promotionCodeId: data.promotionCodeId, percent_off: data.discount.percent_off, amount_off: data.discount.amount_off });
       } else {
         setCouponError(true);
       }
@@ -98,6 +98,7 @@ const CartSidebar = () => {
           items: items.map((i) => ({ name: i.name, price: i.price, quantity: i.quantity, juices: i.juices })),
           shipping,
           couponCode: appliedCoupon?.id ?? null,
+          promotionCodeId: appliedCoupon?.promotionCodeId ?? null,
           metadata: {
             customer_name: name,
             customer_phone: phone,

@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { items, shipping, metadata, couponCode } = req.body;
+  const { items, shipping, metadata, couponCode, promotionCodeId } = req.body;
 
   if (!items || !items.length) {
     return res.status(400).json({ error: 'No items provided' });
@@ -50,7 +50,11 @@ export default async function handler(req, res) {
         delivery_notes: metadata?.delivery_notes ?? '',
         bundle_selections: metadata?.bundle_selections ?? '',
       },
-      ...(couponCode ? { discounts: [{ coupon: couponCode }] } : {}),
+      ...(promotionCodeId
+        ? { discounts: [{ promotion_code: promotionCodeId }] }
+        : couponCode
+        ? { discounts: [{ coupon: couponCode }] }
+        : {}),
       success_url: `${process.env.VITE_SITE_URL}/success`,
       cancel_url: `${process.env.VITE_SITE_URL}/cancel`,
     });
