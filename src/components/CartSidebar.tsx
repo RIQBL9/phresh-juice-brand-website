@@ -340,11 +340,11 @@ const CartSidebar = () => {
                   </div>
                   {appliedCoupon && (
                     <p className="mt-2 text-sm font-medium" style={{ color: DG }}>
-                      ✓ Code applied — {discountLabel}!
+                      ✅ Discount applied!
                     </p>
                   )}
                   {couponError && (
-                    <p className="mt-2 text-sm text-red-500">Invalid or expired code.</p>
+                    <p className="mt-2 text-sm text-red-500">❌ Invalid code, please try again.</p>
                   )}
                 </div>
               </form>
