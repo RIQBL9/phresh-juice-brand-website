@@ -7,33 +7,29 @@ export default async function handler(req, res) {
   }
 
   const { code } = req.body;
-  console.log('[validate-coupon] received code:', code);
-  console.log('[validate-coupon] key prefix:', process.env.STRIPE_SECRET_KEY?.slice(0, 8));
+  const normalised = (code ?? '').trim().toUpperCase();
+  console.log('[validate-coupon] received code:', normalised);
 
   try {
-    const promoCodes = await stripe.promotionCodes.list({ code, limit: 5 });
-    console.log('[validate-coupon] promo codes found:', promoCodes.data.length);
-    promoCodes.data.forEach((p) => {
-      console.log('[validate-coupon] promo:', p.id, 'code:', p.code, 'active:', p.active, 'coupon valid:', p.coupon?.valid);
-    });
+    // Fetch all active promotion codes and match case-insensitively
+    const promoCodes = await stripe.promotionCodes.list({ limit: 100, active: true });
+    console.log('[validate-coupon] total active promo codes:', promoCodes.data.length);
+    promoCodes.data.forEach((p) => console.log('[validate-coupon] found:', p.code));
 
-    const activePromo = promoCodes.data.find((p) => p.active && p.coupon?.valid);
-    if (activePromo) {
+    const match = promoCodes.data.find(
+      (p) => p.code.toUpperCase() === normalised && p.coupon?.valid
+    );
+
+    if (match) {
+      console.log('[validate-coupon] matched:', match.id, match.code);
       return res.status(200).json({
         valid: true,
-        discount: activePromo.coupon,
-        promotionCodeId: activePromo.id,
+        discount: match.coupon,
+        promotionCodeId: match.id,
       });
     }
 
-    // Fall back to raw coupon ID
-    console.log('[validate-coupon] no active promo found, trying coupon retrieve...');
-    const coupon = await stripe.coupons.retrieve(code);
-    console.log('[validate-coupon] coupon:', coupon.id, 'valid:', coupon.valid);
-    if (coupon.valid) {
-      return res.status(200).json({ valid: true, discount: coupon, promotionCodeId: null });
-    }
-
+    console.log('[validate-coupon] no match found for:', normalised);
     return res.status(200).json({ valid: false });
   } catch (error) {
     console.error('[validate-coupon] error:', error.message);
