@@ -27,12 +27,19 @@ const CartSidebar = () => {
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<{ id: string; percent_off: number | null; amount_off: number | null } | null>(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
       const t = setTimeout(() => {
         setStep("cart");
         setError(false);
+        setCouponInput("");
+        setAppliedCoupon(null);
+        setCouponError(false);
       }, 300);
       return () => clearTimeout(t);
     }
@@ -41,6 +48,37 @@ const CartSidebar = () => {
   const isManchester = postcode.trim().length >= 2 ? isManchesterPostcode(postcode) : null;
   const deliveryCost: number | null =
     isManchester === null ? null : isManchester ? 0 : DELIVERY_CHARGE;
+
+  const handleApplyCoupon = async () => {
+    const code = couponInput.trim().toUpperCase();
+    if (!code) return;
+    setCouponLoading(true);
+    setCouponError(false);
+    setAppliedCoupon(null);
+    try {
+      const res = await fetch("/api/validate-coupon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      const data = await res.json();
+      if (data.valid) {
+        setAppliedCoupon({ id: code, percent_off: data.discount.percent_off, amount_off: data.discount.amount_off });
+      } else {
+        setCouponError(true);
+      }
+    } catch {
+      setCouponError(true);
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const discountLabel = appliedCoupon
+    ? appliedCoupon.percent_off !== null
+      ? `${appliedCoupon.percent_off}% off`
+      : `${fmt(appliedCoupon.amount_off!)} off`
+    : null;
 
   const handleDeliverySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +97,7 @@ const CartSidebar = () => {
         body: JSON.stringify({
           items: items.map((i) => ({ name: i.name, price: i.price, quantity: i.quantity, juices: i.juices })),
           shipping,
+          couponCode: appliedCoupon?.id ?? null,
           metadata: {
             customer_name: name,
             customer_phone: phone,
@@ -272,6 +311,41 @@ const CartSidebar = () => {
                     className={inputClass}
                     style={{ ...inputStyle, resize: "none" }}
                   />
+                </div>
+
+                <div>
+                  <label className={labelClass} style={{ color: DG }}>
+                    Discount Code{" "}
+                    <span className="normal-case font-normal text-gray-400">(optional)</span>
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={couponInput}
+                      onChange={(e) => { setCouponInput(e.target.value); setCouponError(false); setAppliedCoupon(null); }}
+                      placeholder="Enter code"
+                      disabled={!!appliedCoupon}
+                      className={inputClass}
+                      style={{ ...inputStyle, flex: 1 }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleApplyCoupon}
+                      disabled={couponLoading || !!appliedCoupon || !couponInput.trim()}
+                      className="px-4 py-3 rounded-lg text-sm font-semibold transition-opacity hover:opacity-80 disabled:opacity-40 shrink-0"
+                      style={{ background: DG, color: "white" }}
+                    >
+                      {couponLoading ? "..." : "Apply"}
+                    </button>
+                  </div>
+                  {appliedCoupon && (
+                    <p className="mt-2 text-sm font-medium" style={{ color: DG }}>
+                      ✓ Code applied — {discountLabel}!
+                    </p>
+                  )}
+                  {couponError && (
+                    <p className="mt-2 text-sm text-red-500">Invalid or expired code.</p>
+                  )}
                 </div>
               </form>
             </div>
