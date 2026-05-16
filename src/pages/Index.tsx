@@ -165,6 +165,7 @@ const Index = () => {
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-white">
             <a href="#top" className="hover:opacity-70 transition-opacity">Home</a>
             <a href="#juices" className="hover:opacity-70 transition-opacity">Shop</a>
+            <a href="/bundles" className="hover:opacity-70 transition-opacity">Bundles</a>
             <a href="#about" className="hover:opacity-70 transition-opacity">About</a>
             <a href="#community" className="hover:opacity-70 transition-opacity">Community</a>
             <button
@@ -198,6 +199,7 @@ const Index = () => {
             <nav className="flex flex-col gap-3 pt-3 text-sm font-medium text-white">
               <a href="#top" onClick={() => setMobileOpen(false)} className="hover:opacity-70">Home</a>
               <a href="#juices" onClick={() => setMobileOpen(false)} className="hover:opacity-70">Shop</a>
+              <a href="/bundles" onClick={() => setMobileOpen(false)} className="hover:opacity-70">Bundles</a>
               <a href="#about" onClick={() => setMobileOpen(false)} className="hover:opacity-70">About</a>
               <a href="#community" onClick={() => setMobileOpen(false)} className="hover:opacity-70">Community</a>
             </nav>

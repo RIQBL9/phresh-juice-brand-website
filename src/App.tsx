@@ -7,6 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import CartSidebar from "@/components/CartSidebar";
 import NewsletterPopup from "./components/NewsletterPopup.tsx";
 import Index from "./pages/Index.tsx";
+import Bundles from "./pages/Bundles.tsx";
 import Success from "./pages/Success.tsx";
 import Cancel from "./pages/Cancel.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -24,6 +25,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/bundles" element={<Bundles />} />
             <Route path="/success" element={<Success />} />
             <Route path="/cancel" element={<Cancel />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
