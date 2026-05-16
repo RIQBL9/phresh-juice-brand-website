@@ -28,7 +28,7 @@ const CartSidebar = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [couponInput, setCouponInput] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<{ id: string; promotionCodeId: string | null; percent_off: number | null; amount_off: number | null } | null>(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<{ id: string; promotionCodeId: string | null; discountText: string } | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState(false);
 
@@ -63,9 +63,8 @@ const CartSidebar = () => {
       });
       const data = await res.json();
       if (data.valid) {
-        setAppliedCoupon({ id: code, promotionCodeId: data.promotionCodeId, percent_off: data.discount.percent_off, amount_off: data.discount.amount_off });
+        setAppliedCoupon({ id: code, promotionCodeId: data.promotionCodeId, discountText: data.discountText });
       } else {
-        console.error('[validate-coupon] debug:', data._debug);
         setCouponError(true);
       }
     } catch {
@@ -75,11 +74,6 @@ const CartSidebar = () => {
     }
   };
 
-  const discountLabel = appliedCoupon
-    ? appliedCoupon.percent_off !== null
-      ? `${appliedCoupon.percent_off}% off`
-      : `${fmt(appliedCoupon.amount_off!)} off`
-    : null;
 
   const handleDeliverySubmit = async (e: React.FormEvent) => {
     e.preventDefault();

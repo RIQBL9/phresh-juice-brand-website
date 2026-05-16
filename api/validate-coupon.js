@@ -21,9 +21,15 @@ export default async function handler(req, res) {
       const isMatch = promoUpper === normalised;
       console.log(`[v6] promo: "${p.code}" hex:${promoHex} active:${p.active} match:${isMatch}`);
       if (isMatch) {
+        const coupon = p.coupon;
+        const discountText = coupon?.percent_off
+          ? `${coupon.percent_off}% off`
+          : coupon?.amount_off
+          ? `£${(coupon.amount_off / 100).toFixed(2)} off`
+          : 'discount applied';
         return res.status(200).json({
           valid: true,
-          discount: p.coupon,
+          discountText,
           promotionCodeId: p.id,
         });
       }
