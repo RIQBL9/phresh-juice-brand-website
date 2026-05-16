@@ -8,31 +8,31 @@ export default async function handler(req, res) {
 
   const { code } = req.body;
   const normalised = (code ?? '').trim().toUpperCase();
-  console.log('[validate-coupon] received code:', normalised);
+  const normalisedHex = Buffer.from(normalised).toString('hex');
+  console.log('[v6] received code:', normalised, 'hex:', normalisedHex);
 
   try {
-    // Fetch all active promotion codes and match case-insensitively
-    const promoCodes = await stripe.promotionCodes.list({ limit: 100, active: true });
-    console.log('[validate-coupon] total active promo codes:', promoCodes.data.length);
-    promoCodes.data.forEach((p) => console.log('[validate-coupon] found:', p.code));
+    const promoCodes = await stripe.promotionCodes.list({ limit: 100 });
+    console.log('[v6] total promo codes:', promoCodes.data.length);
 
-    const match = promoCodes.data.find(
-      (p) => p.code.toUpperCase() === normalised
-    );
-
-    if (match) {
-      console.log('[validate-coupon] matched:', match.id, match.code);
-      return res.status(200).json({
-        valid: true,
-        discount: match.coupon,
-        promotionCodeId: match.id,
-      });
+    for (const p of promoCodes.data) {
+      const promoHex = Buffer.from(p.code).toString('hex');
+      const promoUpper = p.code.toUpperCase();
+      const isMatch = promoUpper === normalised;
+      console.log(`[v6] promo: "${p.code}" hex:${promoHex} active:${p.active} match:${isMatch}`);
+      if (isMatch) {
+        return res.status(200).json({
+          valid: true,
+          discount: p.coupon,
+          promotionCodeId: p.id,
+        });
+      }
     }
 
-    console.log('[validate-coupon] no match found for:', normalised);
+    console.log('[v6] no match found');
     return res.status(200).json({ valid: false });
   } catch (error) {
-    console.error('[validate-coupon] error:', error.message);
+    console.error('[v6] error:', error.message);
     return res.status(200).json({ valid: false, _debug: error.message });
   }
 }
