@@ -65,6 +65,7 @@ const CartSidebar = () => {
       if (data.valid) {
         setAppliedCoupon({ id: code, promotionCodeId: data.promotionCodeId, percent_off: data.discount.percent_off, amount_off: data.discount.amount_off });
       } else {
+        console.error('[validate-coupon] debug:', data._debug);
         setCouponError(true);
       }
     } catch {

@@ -37,6 +37,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ valid: false });
   } catch (error) {
     console.error('[validate-coupon] error:', error.message);
-    return res.status(200).json({ valid: false });
+    return res.status(200).json({ valid: false, _debug: error.message });
   }
 }
