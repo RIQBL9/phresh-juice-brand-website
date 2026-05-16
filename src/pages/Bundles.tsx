@@ -22,13 +22,13 @@ const JUICES = [
 
 const bundles = [
   { id: 101, count: 5,  price: 2500, original: 3000, popular: false,
-    perks: ["Mix any 5 flavours", "Free chilled delivery bag", "Perfect for a week"] },
+    perks: ["Mix any 5 flavours", "Perfect for a week"] },
   { id: 102, count: 10, price: 5000, original: 6000, popular: true,
-    perks: ["Mix any 10 flavours", "Free chilled delivery bag", "Great for a cleanse"] },
+    perks: ["Mix any 10 flavours", "Great for a cleanse"] },
   { id: 103, count: 15, price: 7000, original: 9000, popular: false,
-    perks: ["Mix any 15 flavours", "Free chilled delivery bag", "Save £20 vs individual"] },
+    perks: ["Mix any 15 flavours", "Save £20 vs individual"] },
   { id: 104, count: 20, price: 9000, original: 12000, popular: false,
-    perks: ["Mix any 20 flavours", "Free chilled delivery bag", "Best value — save £30"] },
+    perks: ["Mix any 20 flavours", "Best value — save £30"] },
 ];
 
 type Bundle = typeof bundles[0];
