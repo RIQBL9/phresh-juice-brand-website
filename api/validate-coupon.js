@@ -13,7 +13,8 @@ export default async function handler(req, res) {
     } else {
       res.status(200).json({ valid: false });
     }
-  } catch {
+  } catch (error) {
+    console.error('Coupon validation error:', error.message);
     res.status(200).json({ valid: false });
   }
 }
