@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     promoCodes.data.forEach((p) => console.log('[validate-coupon] found:', p.code));
 
     const match = promoCodes.data.find(
-      (p) => p.code.toUpperCase() === normalised && p.coupon?.valid
+      (p) => p.code.toUpperCase() === normalised
     );
 
     if (match) {
