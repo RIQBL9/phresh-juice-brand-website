@@ -8,19 +8,15 @@ export default async function handler(req, res) {
 
   const { code } = req.body;
   const normalised = (code ?? '').trim().toUpperCase();
-  const normalisedHex = Buffer.from(normalised).toString('hex');
-  console.log('[v6] received code:', normalised, 'hex:', normalisedHex);
+  if (!normalised) {
+    return res.status(400).json({ valid: false });
+  }
 
   try {
-    const promoCodes = await stripe.promotionCodes.list({ limit: 100 });
-    console.log('[v6] total promo codes:', promoCodes.data.length);
+    const promoCodes = await stripe.promotionCodes.list({ limit: 100, active: true });
 
     for (const p of promoCodes.data) {
-      const promoHex = Buffer.from(p.code).toString('hex');
-      const promoUpper = p.code.toUpperCase();
-      const isMatch = promoUpper === normalised;
-      console.log(`[v6] promo: "${p.code}" hex:${promoHex} active:${p.active} match:${isMatch}`);
-      if (isMatch) {
+      if (p.code.toUpperCase() === normalised) {
         const coupon = p.coupon;
         const discountText = coupon?.percent_off
           ? `${coupon.percent_off}% off`
@@ -35,10 +31,9 @@ export default async function handler(req, res) {
       }
     }
 
-    console.log('[v6] no match found');
     return res.status(200).json({ valid: false });
   } catch (error) {
-    console.error('[v6] error:', error.message);
-    return res.status(200).json({ valid: false, _debug: error.message });
+    console.error('validate-coupon error:', error.message);
+    return res.status(200).json({ valid: false });
   }
 }

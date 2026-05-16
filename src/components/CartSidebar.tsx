@@ -74,7 +74,6 @@ const CartSidebar = () => {
     }
   };
 
-
   const handleDeliverySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const shipping = isManchesterPostcode(postcode) ? 0 : DELIVERY_CHARGE;
