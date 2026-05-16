@@ -57,7 +57,7 @@ const CartSidebar = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          items: items.map((i) => ({ name: i.name, price: i.price, quantity: i.quantity })),
+          items: items.map((i) => ({ name: i.name, price: i.price, quantity: i.quantity, juices: i.juices })),
           shipping,
           metadata: {
             customer_name: name,

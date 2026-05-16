@@ -16,7 +16,9 @@ export default async function handler(req, res) {
   const lineItems = items.map((item) => ({
     price_data: {
       currency: 'gbp',
-      product_data: { name: item.name },
+      product_data: {
+        name: item.juices ? `${item.name} (${item.juices})` : item.name,
+      },
       unit_amount: item.price,
     },
     quantity: item.quantity,
