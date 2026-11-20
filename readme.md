@@ -4,8 +4,17 @@
 Live site: [phreshmcr.uk](https://phreshmcr.uk)
  
 ---
- 
+ ## Star History
+
+<a href="https://www.star-history.com/?repos=riqbl9%2Fphresh-juice-brand-website&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=riqbl9/phresh-juice-brand-website&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=riqbl9/phresh-juice-brand-website&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=riqbl9/phresh-juice-brand-website&type=date&legend=top-left" />
+ </picture>
+</a>
 ## Tech Stack
+ ---
  
 - **Framework:** React (Vite)
 - **Hosting:** Vercel
