@@ -4,16 +4,7 @@
 Live site: [phreshmcr.uk](https://phreshmcr.uk)
  
 ---
- ## Star History
-
-<a href="https://www.star-history.com/?repos=riqbl9%2Fphresh-juice-brand-website&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=riqbl9/phresh-juice-brand-website&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=riqbl9/phresh-juice-brand-website&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=riqbl9/phresh-juice-brand-website&type=date&legend=top-left" />
- </picture>
-</a>
-## Tech Stack
+<a href="https://trendshift.io/repositories/82054?utm_source=repository-badge&amp;utm_medium=badge&amp;utm_campaign=badge-repository-82054" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/repositories/82054" alt="morluto%2Frea | Trendshift" width="250" height="55"/></a>
  ---
  
 - **Framework:** React (Vite)
